@@ -9,6 +9,10 @@ import Dashboard from "./pages/Dashboard";
 import Assessments from "./pages/Assessments";
 import Users from "./pages/Users";
 import Analytics from "./pages/Analytics";
+import StudentDashboard from "./pages/student/StudentDashboard";
+import StudentAssessments from "./pages/student/StudentAssessments";
+import StudentGrades from "./pages/student/StudentGrades";
+import SchoolManagement from "./pages/SchoolManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -20,6 +24,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Teacher Routes */}
           <Route
             path="/"
             element={
@@ -49,6 +54,39 @@ const App = () => (
             element={
               <DashboardLayout>
                 <Analytics />
+              </DashboardLayout>
+            }
+          />
+          {/* Student Routes */}
+          <Route
+            path="/student"
+            element={
+              <DashboardLayout>
+                <StudentDashboard />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/student/assessments"
+            element={
+              <DashboardLayout>
+                <StudentAssessments />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/student/grades"
+            element={
+              <DashboardLayout>
+                <StudentGrades />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path="/school-management"
+            element={
+              <DashboardLayout>
+                <SchoolManagement />
               </DashboardLayout>
             }
           />
