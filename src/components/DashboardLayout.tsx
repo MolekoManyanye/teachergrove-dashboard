@@ -2,16 +2,28 @@
 import React from "react";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { BookOpen, Users, BarChart, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Determine if we're in student or teacher section
+  const isStudentSection = location.pathname.startsWith("/student");
 
-  const menuItems = [
+  const teacherMenuItems = [
     { icon: BookOpen, label: "Assessments", path: "/assessments" },
     { icon: Users, label: "Users", path: "/users" },
     { icon: BarChart, label: "Analytics", path: "/analytics" },
   ];
+
+  const studentMenuItems = [
+    { icon: BookOpen, label: "Dashboard", path: "/student" },
+    { icon: BookOpen, label: "Assessments", path: "/student/assessments" },
+    { icon: BarChart, label: "Grades", path: "/student/grades" },
+  ];
+
+  const menuItems = isStudentSection ? studentMenuItems : teacherMenuItems;
 
   return (
     <SidebarProvider>
