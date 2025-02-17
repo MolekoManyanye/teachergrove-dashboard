@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DashboardLayout } from "./components/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import Assessments from "./pages/Assessments";
@@ -24,9 +24,12 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Redirect root to student dashboard */}
+          <Route path="/" element={<Navigate to="/student" replace />} />
+          
           {/* Teacher Routes */}
           <Route
-            path="/"
+            path="/teacher"
             element={
               <DashboardLayout>
                 <Dashboard />
