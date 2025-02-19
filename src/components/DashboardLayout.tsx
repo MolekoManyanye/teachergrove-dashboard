@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarMenuSub } from "@/components/ui/sidebar";
 import { BookOpen, Users, BarChart, LogOut, Menu, GraduationCap, ChevronRight } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -7,6 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
   
   // Determine if we're in student or teacher section
   const isStudentSection = location.pathname.startsWith("/student");
@@ -57,6 +58,11 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
 
   const menuItems = isStudentSection ? studentMenuItems : teacherMenuItems;
 
+  const toggleSubject = (subjectName: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    setExpandedSubject(expandedSubject === subjectName ? null : subjectName);
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
@@ -90,25 +96,31 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
                             {item.items.map((subject) => (
                               <div key={subject.name} className="space-y-1">
                                 <SidebarMenuButton
-                                  onClick={() => navigate(subject.path)}
+                                  onClick={(e) => toggleSubject(subject.name, e)}
                                   className={`flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-mint-50 hover:text-mint-600 rounded-lg transition-colors ${
                                     location.pathname.startsWith(subject.path) ? "bg-mint-50 text-mint-600" : ""
                                   }`}
                                 >
                                   <span className="pl-8">{subject.name}</span>
-                                  <ChevronRight className="w-4 h-4" />
+                                  <ChevronRight className={`w-4 h-4 transition-transform ${
+                                    expandedSubject === subject.name ? "rotate-90" : ""
+                                  }`} />
                                 </SidebarMenuButton>
-                                {subject.assessments.map((assessment) => (
-                                  <SidebarMenuButton
-                                    key={assessment.name}
-                                    onClick={() => navigate(assessment.path)}
-                                    className={`flex items-center w-full pl-12 pr-4 py-1.5 text-sm text-gray-600 hover:bg-mint-50 hover:text-mint-600 rounded-lg transition-colors ${
-                                      location.pathname === assessment.path ? "bg-mint-50 text-mint-600" : ""
-                                    }`}
-                                  >
-                                    {assessment.name}
-                                  </SidebarMenuButton>
-                                ))}
+                                {expandedSubject === subject.name && (
+                                  <div className="animate-in slide-in-from-left-1">
+                                    {subject.assessments.map((assessment) => (
+                                      <SidebarMenuButton
+                                        key={assessment.name}
+                                        onClick={() => navigate(assessment.path)}
+                                        className={`flex items-center w-full pl-12 pr-4 py-1.5 text-sm text-gray-600 hover:bg-mint-50 hover:text-mint-600 rounded-lg transition-colors ${
+                                          location.pathname === assessment.path ? "bg-mint-50 text-mint-600" : ""
+                                        }`}
+                                      >
+                                        {assessment.name}
+                                      </SidebarMenuButton>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
                             ))}
                           </SidebarMenuSub>
