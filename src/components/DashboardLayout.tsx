@@ -8,6 +8,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
   const navigate = useNavigate();
   const location = useLocation();
   const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
+  const [isSubjectsExpanded, setIsSubjectsExpanded] = useState(true);
   
   // Determine if we're in student or teacher section
   const isStudentSection = location.pathname.startsWith("/student");
@@ -63,6 +64,15 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
     setExpandedSubject(expandedSubject === subjectName ? null : subjectName);
   };
 
+  const toggleSubjects = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setIsSubjectsExpanded(!isSubjectsExpanded);
+    // When closing subjects menu, also close any open subject
+    if (isSubjectsExpanded) {
+      setExpandedSubject(null);
+    }
+  };
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
@@ -85,45 +95,53 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
                       {item.items ? (
                         <div className="space-y-1">
                           <SidebarMenuButton
+                            onClick={toggleSubjects}
                             className={`flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-mint-50 hover:text-mint-600 rounded-lg transition-colors`}
                           >
                             <div className="flex items-center gap-3">
                               <item.icon className="w-5 h-5" />
                               <span>{item.label}</span>
                             </div>
+                            <ChevronRight className={`w-4 h-4 transition-transform ${
+                              isSubjectsExpanded ? "rotate-90" : ""
+                            }`} />
                           </SidebarMenuButton>
-                          <SidebarMenuSub>
-                            {item.items.map((subject) => (
-                              <div key={subject.name} className="space-y-1">
-                                <SidebarMenuButton
-                                  onClick={(e) => toggleSubject(subject.name, e)}
-                                  className={`flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-mint-50 hover:text-mint-600 rounded-lg transition-colors ${
-                                    location.pathname.startsWith(subject.path) ? "bg-mint-50 text-mint-600" : ""
-                                  }`}
-                                >
-                                  <span className="pl-8">{subject.name}</span>
-                                  <ChevronRight className={`w-4 h-4 transition-transform ${
-                                    expandedSubject === subject.name ? "rotate-90" : ""
-                                  }`} />
-                                </SidebarMenuButton>
-                                {expandedSubject === subject.name && (
-                                  <div className="animate-in slide-in-from-left-1">
-                                    {subject.assessments.map((assessment) => (
-                                      <SidebarMenuButton
-                                        key={assessment.name}
-                                        onClick={() => navigate(assessment.path)}
-                                        className={`flex items-center w-full pl-12 pr-4 py-1.5 text-sm text-gray-600 hover:bg-mint-50 hover:text-mint-600 rounded-lg transition-colors ${
-                                          location.pathname === assessment.path ? "bg-mint-50 text-mint-600" : ""
-                                        }`}
-                                      >
-                                        {assessment.name}
-                                      </SidebarMenuButton>
-                                    ))}
+                          {isSubjectsExpanded && (
+                            <SidebarMenuSub>
+                              <div className="animate-in slide-in-from-left-1">
+                                {item.items.map((subject) => (
+                                  <div key={subject.name} className="space-y-1">
+                                    <SidebarMenuButton
+                                      onClick={(e) => toggleSubject(subject.name, e)}
+                                      className={`flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-mint-50 hover:text-mint-600 rounded-lg transition-colors ${
+                                        location.pathname.startsWith(subject.path) ? "bg-mint-50 text-mint-600" : ""
+                                      }`}
+                                    >
+                                      <span className="pl-8">{subject.name}</span>
+                                      <ChevronRight className={`w-4 h-4 transition-transform ${
+                                        expandedSubject === subject.name ? "rotate-90" : ""
+                                      }`} />
+                                    </SidebarMenuButton>
+                                    {expandedSubject === subject.name && (
+                                      <div className="animate-in slide-in-from-left-1">
+                                        {subject.assessments.map((assessment) => (
+                                          <SidebarMenuButton
+                                            key={assessment.name}
+                                            onClick={() => navigate(assessment.path)}
+                                            className={`flex items-center w-full pl-12 pr-4 py-1.5 text-sm text-gray-600 hover:bg-mint-50 hover:text-mint-600 rounded-lg transition-colors ${
+                                              location.pathname === assessment.path ? "bg-mint-50 text-mint-600" : ""
+                                            }`}
+                                          >
+                                            {assessment.name}
+                                          </SidebarMenuButton>
+                                        ))}
+                                      </div>
+                                    )}
                                   </div>
-                                )}
+                                ))}
                               </div>
-                            ))}
-                          </SidebarMenuSub>
+                            </SidebarMenuSub>
+                          )}
                         </div>
                       ) : (
                         <SidebarMenuButton
