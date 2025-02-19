@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus } from "lucide-react";
@@ -11,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const Users = () => {
+const TeacherUsers = () => {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -65,4 +64,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default TeacherUsers;

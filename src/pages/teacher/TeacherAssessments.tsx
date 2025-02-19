@@ -1,9 +1,8 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 
-const Assessments = () => {
+const TeacherAssessments = () => {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -40,4 +39,4 @@ const Assessments = () => {
   );
 };
 
-export default Assessments;
+export default TeacherAssessments;

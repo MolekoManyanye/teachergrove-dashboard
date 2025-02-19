@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, BookOpen, GraduationCap, Activity } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
@@ -10,7 +9,7 @@ const data = [
   { name: "Quiz 4", score: 88 },
 ];
 
-const Dashboard = () => {
+const TeacherDashboard = () => {
   return (
     <div className="space-y-8">
       <div>
@@ -86,4 +85,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default TeacherDashboard;

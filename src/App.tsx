@@ -5,10 +5,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DashboardLayout } from "./components/DashboardLayout";
-import Dashboard from "./pages/Dashboard";
-import Assessments from "./pages/Assessments";
-import Users from "./pages/Users";
-import Analytics from "./pages/Analytics";
+import TeacherDashboard from "./pages/teacher/TeacherDashboard";
+import TeacherAssessments from "./pages/teacher/TeacherAssessments";
+import TeacherUsers from "./pages/teacher/TeacherUsers";
+import TeacherAnalytics from "./pages/teacher/TeacherAnalytics";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentAssessments from "./pages/student/StudentAssessments";
 import StudentGrades from "./pages/student/StudentGrades";
@@ -32,34 +32,35 @@ const App = () => (
             path="/teacher"
             element={
               <DashboardLayout>
-                <Dashboard />
+                <TeacherDashboard />
               </DashboardLayout>
             }
           />
           <Route
-            path="/assessments"
+            path="/teacher/assessments"
             element={
               <DashboardLayout>
-                <Assessments />
+                <TeacherAssessments />
               </DashboardLayout>
             }
           />
           <Route
-            path="/users"
+            path="/teacher/users"
             element={
               <DashboardLayout>
-                <Users />
+                <TeacherUsers />
               </DashboardLayout>
             }
           />
           <Route
-            path="/analytics"
+            path="/teacher/analytics"
             element={
               <DashboardLayout>
-                <Analytics />
+                <TeacherAnalytics />
               </DashboardLayout>
             }
           />
+
           {/* Student Routes */}
           <Route
             path="/student"

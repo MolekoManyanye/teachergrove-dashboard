@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
@@ -20,7 +19,7 @@ const pieData = [
 
 const COLORS = ["#2a9689", "#4ade80", "#fbbf24", "#f87171"];
 
-const Analytics = () => {
+const TeacherAnalytics = () => {
   return (
     <div className="space-y-8">
       <div>
@@ -80,4 +79,4 @@ const Analytics = () => {
   );
 };
 
-export default Analytics;
+export default TeacherAnalytics;

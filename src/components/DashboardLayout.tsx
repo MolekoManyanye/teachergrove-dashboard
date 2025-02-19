@@ -12,9 +12,10 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
   const isStudentSection = location.pathname.startsWith("/student");
 
   const teacherMenuItems = [
-    { icon: BookOpen, label: "Assessments", path: "/assessments" },
-    { icon: Users, label: "Users", path: "/users" },
-    { icon: BarChart, label: "Analytics", path: "/analytics" },
+    { icon: BookOpen, label: "Dashboard", path: "/teacher" },
+    { icon: BookOpen, label: "Assessments", path: "/teacher/assessments" },
+    { icon: Users, label: "Users", path: "/teacher/users" },
+    { icon: BarChart, label: "Analytics", path: "/teacher/analytics" },
   ];
 
   const studentMenuItems = [
