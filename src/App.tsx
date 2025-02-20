@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { DashboardLayout } from "./components/DashboardLayout";
 import Homepage from "./pages/Homepage";
 import Login from "./pages/auth/Login";
@@ -25,83 +25,81 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Homepage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          
-          {/* Teacher Routes */}
-          <Route
-            path="/teacher"
-            element={
-              <DashboardLayout>
-                <TeacherDashboard />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/teacher/assessments"
-            element={
-              <DashboardLayout>
-                <TeacherAssessments />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/teacher/users"
-            element={
-              <DashboardLayout>
-                <TeacherUsers />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/teacher/analytics"
-            element={
-              <DashboardLayout>
-                <TeacherAnalytics />
-              </DashboardLayout>
-            }
-          />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Homepage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        
+        {/* Teacher Routes */}
+        <Route
+          path="/teacher"
+          element={
+            <DashboardLayout>
+              <TeacherDashboard />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/teacher/assessments"
+          element={
+            <DashboardLayout>
+              <TeacherAssessments />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/teacher/users"
+          element={
+            <DashboardLayout>
+              <TeacherUsers />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/teacher/analytics"
+          element={
+            <DashboardLayout>
+              <TeacherAnalytics />
+            </DashboardLayout>
+          }
+        />
 
-          {/* Student Routes */}
-          <Route
-            path="/student"
-            element={
-              <DashboardLayout>
-                <StudentDashboard />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/student/assessments"
-            element={
-              <DashboardLayout>
-                <StudentAssessments />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/student/grades"
-            element={
-              <DashboardLayout>
-                <StudentGrades />
-              </DashboardLayout>
-            }
-          />
-          <Route
-            path="/school-management"
-            element={
-              <DashboardLayout>
-                <SchoolManagement />
-              </DashboardLayout>
-            }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+        {/* Student Routes */}
+        <Route
+          path="/student"
+          element={
+            <DashboardLayout>
+              <StudentDashboard />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/student/assessments"
+          element={
+            <DashboardLayout>
+              <StudentAssessments />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/student/grades"
+          element={
+            <DashboardLayout>
+              <StudentGrades />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/school-management"
+          element={
+            <DashboardLayout>
+              <SchoolManagement />
+            </DashboardLayout>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </TooltipProvider>
   </QueryClientProvider>
 );
