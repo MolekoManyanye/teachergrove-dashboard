@@ -5,6 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DashboardLayout } from "./components/DashboardLayout";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import TeacherAssessments from "./pages/teacher/TeacherAssessments";
 import TeacherUsers from "./pages/teacher/TeacherUsers";
@@ -24,8 +26,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* Redirect root to student dashboard */}
-          <Route path="/" element={<Navigate to="/student" replace />} />
+          {/* Auth Routes */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           
           {/* Teacher Routes */}
           <Route
