@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -10,7 +9,6 @@ export default function Homepage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navbar */}
       <nav className="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
@@ -35,9 +33,9 @@ export default function Homepage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-mint-500/10 to-mint-500/5">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/80" />
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center space-y-8">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 animate-fadeIn">
@@ -46,21 +44,37 @@ export default function Homepage() {
             <p className="text-xl md:text-2xl text-gray-600 animate-fadeIn delay-100">
               Empowering minds, inspiring futures through excellence in education
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 animate-fadeIn delay-200">
+            <div className="relative py-8">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-mint-200"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="bg-white/80 backdrop-blur-sm px-4 text-lg italic text-mint-600 animate-fadeIn delay-200">
+                  The quest for knowledge never ends
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 animate-fadeIn delay-300">
               <Button size="lg" className="bg-mint-500 hover:bg-mint-600" onClick={() => navigate("/signup")}>
-                Apply Now <ArrowRight className="ml-2" />
+                Begin Your Journey <ArrowRight className="ml-2" />
               </Button>
               <Button size="lg" variant="outline">
-                Learn More <ChevronRight className="ml-2" />
+                Discover More <ChevronRight className="ml-2" />
               </Button>
             </div>
           </div>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gray-50" id="about">
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50" id="about">
         <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Our Commitment to Learning</h2>
+            <p className="text-gray-600">
+              At St. Barnabas, we believe that education is a lifelong journey. Our commitment to continuous learning shapes every aspect of our academic experience.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -79,9 +93,15 @@ export default function Homepage() {
                 description: "Preparing students to become responsible global citizens through international programs.",
               },
             ].map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
+              <Card 
+                key={index} 
+                className="group hover:shadow-lg transition-all duration-300 border-mint-100 hover:border-mint-300"
+              >
                 <CardContent className="p-6 text-center space-y-4">
-                  <feature.icon className="w-12 h-12 text-mint-500 mx-auto" />
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-mint-50 rounded-full scale-110 opacity-0 group-hover:opacity-100 transition-all duration-300" />
+                    <feature.icon className="w-12 h-12 text-mint-500 mx-auto relative z-10 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
                   <h3 className="text-xl font-semibold">{feature.title}</h3>
                   <p className="text-gray-600">{feature.description}</p>
                 </CardContent>
@@ -91,10 +111,14 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* News & Updates */}
       <section className="py-20" id="news">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Latest News & Updates</h2>
+          <div className="max-w-2xl mx-auto text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Continuing Our Story</h2>
+            <p className="text-gray-600">
+              Every day brings new opportunities for learning and growth at St. Barnabas.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -131,10 +155,14 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* School Life */}
-      <section className="py-20 bg-gray-50" id="life">
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white" id="life">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">School Life</h2>
+          <div className="max-w-2xl mx-auto text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Life at St. Barnabas</h2>
+            <p className="text-gray-600">
+              Our vibrant community embraces the endless possibilities of learning beyond the classroom.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { icon: Trophy, title: "Sports & Athletics", count: "15+ Sports Teams" },
@@ -153,7 +181,20 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* Footer */}
+      <section className="py-16 bg-mint-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <BookOpen className="w-12 h-12 text-mint-500 mx-auto mb-6" />
+            <p className="text-2xl md:text-3xl font-serif italic text-gray-800 mb-6">
+              "The quest for knowledge never ends"
+            </p>
+            <p className="text-gray-600">
+              This guiding principle shapes every aspect of education at St. Barnabas, inspiring our students to become lifelong learners.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <footer className="bg-gray-900 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
