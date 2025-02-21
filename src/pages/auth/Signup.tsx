@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Eye, EyeOff, UserCircle } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { authService } from "@/services/auth";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -19,7 +18,6 @@ export default function Signup() {
     username: "",
     password: "",
     confirmPassword: "",
-    role: "Student",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -81,22 +79,6 @@ export default function Signup() {
                   disabled={isLoading}
                 />
               </div>
-            </div>
-            
-            <div className="space-y-2">
-              <Select
-                value={formData.role}
-                onValueChange={(value) => setFormData({ ...formData, role: value })}
-                disabled={isLoading}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select your role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Student">Student</SelectItem>
-                  <SelectItem value="Teacher">Teacher</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             <div className="space-y-2">

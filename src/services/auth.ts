@@ -17,7 +17,6 @@ export interface LoginCredentials {
 
 export interface SignupCredentials extends LoginCredentials {
   confirmPassword?: string;  // Only used in frontend validation
-  role?: string;
 }
 
 export interface Course {
