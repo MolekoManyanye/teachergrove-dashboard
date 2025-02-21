@@ -24,11 +24,14 @@ export default function Login() {
 
     try {
       await authService.login(formData);
+      const dashboardRoute = authService.getDashboardRoute();
+      
       toast({
         title: "Login successful",
         description: "Welcome back!",
       });
-      navigate("/student");
+      
+      navigate(dashboardRoute);
     } catch (error) {
       console.error("Login error:", error);
       toast({

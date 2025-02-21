@@ -17,16 +17,36 @@ export interface LoginCredentials {
 
 export interface SignupCredentials extends LoginCredentials {
   confirmPassword?: string;  // Only used in frontend validation
+  role?: string;
+}
+
+export interface Course {
+  id: string;
+  subject: string;
+  grade: {
+    level: number;
+    section: string;
+  };
+}
+
+export interface UserDetails {
+  id: string;
+  username: string;
+  role: "Student" | "Teacher" | "Admin";
+  first_name?: string;
+  last_name?: string;
+  courses?: Course[];  // For students
+  subjects?: Course[]; // For teachers
+  grade?: {
+    level: number;
+    section: string;
+  };
 }
 
 export interface AuthResponse {
   access: string;
   refresh: string;
-  user: {
-    id: number;
-    username: string;
-    // Add other user fields as needed
-  };
+  user: UserDetails;
 }
 
 export const authService = {
@@ -35,6 +55,11 @@ export const authService = {
     if (response.data.access) {
       localStorage.setItem("token", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
+      
+      // Fetch user details
+      const userDetails = await this.getUserDetails(credentials.username);
+      localStorage.setItem("userRole", userDetails.role);
+      localStorage.setItem("userId", userDetails.id);
     }
     return response.data;
   },
@@ -45,16 +70,55 @@ export const authService = {
     if (response.data.access) {
       localStorage.setItem("token", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
+      
+      // Fetch user details after signup
+      const userDetails = await this.getUserDetails(signupData.username);
+      localStorage.setItem("userRole", userDetails.role);
+      localStorage.setItem("userId", userDetails.id);
     }
+    return response.data;
+  },
+
+  async getUserDetails(id: string): Promise<UserDetails> {
+    const token = this.getCurrentToken();
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+
+    const response = await api.get<UserDetails>(`/users/${id}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   },
 
   logout(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("refresh");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userId");
   },
 
   getCurrentToken(): string | null {
     return localStorage.getItem("token");
+  },
+
+  getUserRole(): string | null {
+    return localStorage.getItem("userRole");
+  },
+
+  getDashboardRoute(): string {
+    const role = this.getUserRole();
+    switch (role) {
+      case "Teacher":
+        return "/teacher";
+      case "Student":
+        return "/student";
+      case "Admin":
+        return "/school-management";
+      default:
+        return "/login";
+    }
   },
 };
