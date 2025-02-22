@@ -12,12 +12,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
+
+interface NewStudent {
+  firstName: string;
+  lastName: string;
+  email: string;
+  studentId: string;
+  grade: string;
+  courses: string[];
+}
 
 const StudentManagement = () => {
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGrade, setSelectedGrade] = useState<string>("all");
   const [selectedSubject, setSelectedSubject] = useState<string>("all");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [newStudent, setNewStudent] = useState<NewStudent>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    studentId: "",
+    grade: "",
+    courses: [],
+  });
 
   const grades = ["Grade 9", "Grade 10", "Grade 11", "Grade 12"];
   const subjects = ["Mathematics", "Science", "English", "History", "Physics"];
@@ -38,6 +68,33 @@ const StudentManagement = () => {
     return matchesSearch && matchesGrade && matchesSubject;
   });
 
+  const handleAddStudent = () => {
+    // Here you would typically make an API call to add the student
+    console.log('Adding new student:', newStudent);
+    
+    toast({
+      title: "Success",
+      description: "Student has been successfully added.",
+    });
+    
+    setIsDialogOpen(false);
+    setNewStudent({
+      firstName: "",
+      lastName: "",
+      email: "",
+      studentId: "",
+      grade: "",
+      courses: [],
+    });
+  };
+
+  const handleInputChange = (field: keyof NewStudent, value: string | string[]) => {
+    setNewStudent(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
@@ -45,9 +102,104 @@ const StudentManagement = () => {
           <h1 className="text-2xl font-semibold text-gray-800">Students</h1>
           <p className="text-gray-600">Manage your students</p>
         </div>
-        <Button className="bg-mint-600 hover:bg-mint-700">
-          <Plus className="mr-2 h-4 w-4" /> Add Student
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="bg-mint-600 hover:bg-mint-700">
+              <Plus className="mr-2 h-4 w-4" /> Add Student
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[525px]">
+            <DialogHeader>
+              <DialogTitle>Add New Student</DialogTitle>
+              <DialogDescription>
+                Enter the student's information below. All fields are required.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    value={newStudent.firstName}
+                    onChange={(e) => handleInputChange("firstName", e.target.value)}
+                    placeholder="John"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    value={newStudent.lastName}
+                    onChange={(e) => handleInputChange("lastName", e.target.value)}
+                    placeholder="Doe"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={newStudent.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  placeholder="student@school.com"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="studentId">Student ID</Label>
+                <Input
+                  id="studentId"
+                  value={newStudent.studentId}
+                  onChange={(e) => handleInputChange("studentId", e.target.value)}
+                  placeholder="STD123"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="grade">Grade</Label>
+                <Select
+                  value={newStudent.grade}
+                  onValueChange={(value) => handleInputChange("grade", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select grade" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {grades.map((grade) => (
+                      <SelectItem key={grade} value={grade}>
+                        {grade}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Courses</Label>
+                <Select
+                  value={newStudent.courses[0] || ""}
+                  onValueChange={(value) => handleInputChange("courses", [value])}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select course" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {subjects.map((subject) => (
+                      <SelectItem key={subject} value={subject}>
+                        {subject}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddStudent}>Add Student</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card>
@@ -147,3 +299,4 @@ const StudentManagement = () => {
 };
 
 export default StudentManagement;
+
