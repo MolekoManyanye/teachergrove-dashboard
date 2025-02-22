@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface NewStudent {
   firstName: string;
@@ -32,6 +32,12 @@ interface NewStudent {
   studentId: string;
   grade: string;
   courses: string[];
+}
+
+interface GradeOption {
+  level: number;
+  section: string;
+  display: string;
 }
 
 const StudentManagement = () => {
@@ -49,14 +55,28 @@ const StudentManagement = () => {
     courses: [],
   });
 
-  const grades = ["Grade 9", "Grade 10", "Grade 11", "Grade 12"];
+  const gradeOptions: GradeOption[] = [
+    { level: 9, section: "A", display: "9A" },
+    { level: 9, section: "B", display: "9B" },
+    { level: 9, section: "C", display: "9C" },
+    { level: 10, section: "A", display: "10A" },
+    { level: 10, section: "B", display: "10B" },
+    { level: 10, section: "C", display: "10C" },
+    { level: 11, section: "A", display: "11A" },
+    { level: 11, section: "B", display: "11B" },
+    { level: 11, section: "C", display: "11C" },
+    { level: 12, section: "A", display: "12A" },
+    { level: 12, section: "B", display: "12B" },
+    { level: 12, section: "C", display: "12C" },
+  ];
+
   const subjects = ["Mathematics", "Science", "English", "History", "Physics"];
 
   const mockStudents = [
-    { id: 1, name: "Jane Smith", email: "jane@example.com", grade: "Grade 10", subjects: ["Mathematics", "Science"], status: "Active" },
-    { id: 2, name: "Sarah Wilson", email: "sarah@example.com", grade: "Grade 9", subjects: ["English", "History"], status: "Active" },
-    { id: 3, name: "Tom Brown", email: "tom@example.com", grade: "Grade 11", subjects: ["Physics", "Mathematics"], status: "Active" },
-    { id: 4, name: "Lisa Johnson", email: "lisa@example.com", grade: "Grade 10", subjects: ["Science", "English"], status: "Inactive" },
+    { id: 1, name: "Jane Smith", email: "jane@example.com", grade: "10A", subjects: ["Mathematics", "Science"], status: "Active" },
+    { id: 2, name: "Sarah Wilson", email: "sarah@example.com", grade: "9C", subjects: ["English", "History"], status: "Active" },
+    { id: 3, name: "Tom Brown", email: "tom@example.com", grade: "11B", subjects: ["Physics", "Mathematics"], status: "Active" },
+    { id: 4, name: "Lisa Johnson", email: "lisa@example.com", grade: "10C", subjects: ["Science", "English"], status: "Inactive" },
   ];
 
   const filteredStudents = mockStudents.filter(student => {
@@ -165,9 +185,9 @@ const StudentManagement = () => {
                     <SelectValue placeholder="Select grade" />
                   </SelectTrigger>
                   <SelectContent>
-                    {grades.map((grade) => (
-                      <SelectItem key={grade} value={grade}>
-                        {grade}
+                    {gradeOptions.map((grade) => (
+                      <SelectItem key={`${grade.level}${grade.section}`} value={grade.display}>
+                        {grade.display}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -221,9 +241,9 @@ const StudentManagement = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Grades</SelectItem>
-                {grades.map((grade) => (
-                  <SelectItem key={grade} value={grade}>
-                    {grade}
+                {gradeOptions.map((grade) => (
+                  <SelectItem key={`${grade.level}${grade.section}`} value={grade.display}>
+                    {grade.display}
                   </SelectItem>
                 ))}
               </SelectContent>
