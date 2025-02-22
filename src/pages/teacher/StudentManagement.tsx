@@ -14,39 +14,39 @@ import {
 } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const TeacherUsers = () => {
+const StudentManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGrade, setSelectedGrade] = useState<string>("all");
-  const [selectedRole, setSelectedRole] = useState<string>("All");
+  const [selectedSubject, setSelectedSubject] = useState<string>("all");
 
   const grades = ["Grade 9", "Grade 10", "Grade 11", "Grade 12"];
-  const roles = ["All", "Teacher", "Student"];
+  const subjects = ["Mathematics", "Science", "English", "History", "Physics"];
 
-  const mockUsers = [
-    { id: 1, name: "John Doe", role: "Teacher", email: "john@example.com", grade: "Grade 9", status: "Active" },
-    { id: 2, name: "Jane Smith", role: "Student", email: "jane@example.com", grade: "Grade 10", status: "Active" },
-    { id: 3, name: "Mike Johnson", role: "Teacher", email: "mike@example.com", grade: "Grade 11", status: "Active" },
-    { id: 4, name: "Sarah Wilson", role: "Student", email: "sarah@example.com", grade: "Grade 9", status: "Inactive" },
+  const mockStudents = [
+    { id: 1, name: "Jane Smith", email: "jane@example.com", grade: "Grade 10", subjects: ["Mathematics", "Science"], status: "Active" },
+    { id: 2, name: "Sarah Wilson", email: "sarah@example.com", grade: "Grade 9", subjects: ["English", "History"], status: "Active" },
+    { id: 3, name: "Tom Brown", email: "tom@example.com", grade: "Grade 11", subjects: ["Physics", "Mathematics"], status: "Active" },
+    { id: 4, name: "Lisa Johnson", email: "lisa@example.com", grade: "Grade 10", subjects: ["Science", "English"], status: "Inactive" },
   ];
 
-  const filteredUsers = mockUsers.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGrade = selectedGrade === "all" || user.grade === selectedGrade;
-    const matchesRole = !selectedRole || selectedRole === "All" || user.role === selectedRole;
+  const filteredStudents = mockStudents.filter(student => {
+    const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         student.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGrade = selectedGrade === "all" || student.grade === selectedGrade;
+    const matchesSubject = selectedSubject === "all" || student.subjects.includes(selectedSubject);
     
-    return matchesSearch && matchesGrade && matchesRole;
+    return matchesSearch && matchesGrade && matchesSubject;
   });
 
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-800">Users</h1>
-          <p className="text-gray-600">Manage teachers and students</p>
+          <h1 className="text-2xl font-semibold text-gray-800">Students</h1>
+          <p className="text-gray-600">Manage your students</p>
         </div>
         <Button className="bg-mint-600 hover:bg-mint-700">
-          <Plus className="mr-2 h-4 w-4" /> Add User
+          <Plus className="mr-2 h-4 w-4" /> Add Student
         </Button>
       </div>
 
@@ -56,7 +56,7 @@ const TeacherUsers = () => {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Search users..."
+                placeholder="Search students..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-9"
@@ -77,14 +77,15 @@ const TeacherUsers = () => {
               </SelectContent>
             </Select>
 
-            <Select value={selectedRole} onValueChange={setSelectedRole}>
+            <Select value={selectedSubject} onValueChange={setSelectedSubject}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select Role" />
+                <SelectValue placeholder="Select Subject" />
               </SelectTrigger>
               <SelectContent>
-                {roles.map((role) => (
-                  <SelectItem key={role} value={role}>
-                    {role}
+                <SelectItem value="all">All Subjects</SelectItem>
+                {subjects.map((subject) => (
+                  <SelectItem key={subject} value={subject}>
+                    {subject}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -95,31 +96,36 @@ const TeacherUsers = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
-                <TableHead>Role</TableHead>
                 <TableHead>Grade</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Subjects</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredUsers.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.name}</TableCell>
+              {filteredStudents.map((student) => (
+                <TableRow key={student.id}>
+                  <TableCell>{student.name}</TableCell>
+                  <TableCell>{student.grade}</TableCell>
+                  <TableCell>{student.email}</TableCell>
                   <TableCell>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      user.role === "Teacher" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"
-                    }`}>
-                      {user.role}
-                    </span>
+                    <div className="flex flex-wrap gap-1">
+                      {student.subjects.map((subject, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                        >
+                          {subject}
+                        </span>
+                      ))}
+                    </div>
                   </TableCell>
-                  <TableCell>{user.grade}</TableCell>
-                  <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      user.status === "Active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
+                      student.status === "Active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
                     }`}>
-                      {user.status}
+                      {student.status}
                     </span>
                   </TableCell>
                   <TableCell>
@@ -140,4 +146,4 @@ const TeacherUsers = () => {
   );
 };
 
-export default TeacherUsers;
+export default StudentManagement;
