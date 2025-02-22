@@ -10,7 +10,7 @@ import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import TeacherAssessments from "./pages/teacher/TeacherAssessments";
-import TeacherUsers from "./pages/teacher/TeacherUsers";
+import StudentManagement from "./pages/teacher/StudentManagement";
 import TeacherAnalytics from "./pages/teacher/TeacherAnalytics";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import StudentAssessments from "./pages/student/StudentAssessments";
@@ -52,7 +52,7 @@ const App = () => (
           path="/teacher/users"
           element={
             <DashboardLayout>
-              <TeacherUsers />
+              <StudentManagement />
             </DashboardLayout>
           }
         />
