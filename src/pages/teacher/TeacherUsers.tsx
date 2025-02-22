@@ -16,8 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const TeacherUsers = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedGrade, setSelectedGrade] = useState<string>("");
-  const [selectedRole, setSelectedRole] = useState<string>("");
+  const [selectedGrade, setSelectedGrade] = useState<string>("all");
+  const [selectedRole, setSelectedRole] = useState<string>("All");
 
   const grades = ["Grade 9", "Grade 10", "Grade 11", "Grade 12"];
   const roles = ["All", "Teacher", "Student"];
@@ -32,7 +32,7 @@ const TeacherUsers = () => {
   const filteredUsers = mockUsers.filter(user => {
     const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGrade = !selectedGrade || user.grade === selectedGrade;
+    const matchesGrade = selectedGrade === "all" || user.grade === selectedGrade;
     const matchesRole = !selectedRole || selectedRole === "All" || user.role === selectedRole;
     
     return matchesSearch && matchesGrade && matchesRole;
@@ -68,7 +68,7 @@ const TeacherUsers = () => {
                 <SelectValue placeholder="Select Grade" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Grades</SelectItem>
+                <SelectItem value="all">All Grades</SelectItem>
                 {grades.map((grade) => (
                   <SelectItem key={grade} value={grade}>
                     {grade}
