@@ -1,6 +1,9 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, BookOpen, GraduationCap, Activity } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState } from "react";
 
 const data = [
   { name: "Quiz 1", score: 85 },
@@ -10,11 +13,45 @@ const data = [
 ];
 
 const TeacherDashboard = () => {
+  const [selectedGrade, setSelectedGrade] = useState<string>("");
+  const [selectedSubject, setSelectedSubject] = useState<string>("");
+
+  const grades = ["Grade 9", "Grade 10", "Grade 11", "Grade 12"];
+  const subjects = ["Mathematics", "Science", "English"];
+
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold text-gray-800">Welcome back, Teacher!</h1>
         <p className="text-gray-600">Here's what's happening in your classroom.</p>
+      </div>
+
+      <div className="flex gap-4 items-center">
+        <Select value={selectedGrade} onValueChange={setSelectedGrade}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select Grade" />
+          </SelectTrigger>
+          <SelectContent>
+            {grades.map((grade) => (
+              <SelectItem key={grade} value={grade}>
+                {grade}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        <Select value={selectedSubject} onValueChange={setSelectedSubject}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select Subject" />
+          </SelectTrigger>
+          <SelectContent>
+            {subjects.map((subject) => (
+              <SelectItem key={subject} value={subject}>
+                {subject}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -86,3 +123,4 @@ const TeacherDashboard = () => {
 };
 
 export default TeacherDashboard;
+

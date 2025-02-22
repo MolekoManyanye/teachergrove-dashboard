@@ -8,14 +8,46 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
   const navigate = useNavigate();
   const location = useLocation();
   const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
-  const [isSubjectsExpanded, setIsSubjectsExpanded] = useState(true);
+  const [isSubjectsExpanded, setIsSubjectsExpanded] = useState(false); // Changed to false for initial collapsed state
   
   // Determine if we're in student or teacher section
   const isStudentSection = location.pathname.startsWith("/student");
 
   const teacherMenuItems = [
     { icon: BookOpen, label: "Dashboard", path: "/teacher" },
-    { icon: BookOpen, label: "Assessments", path: "/teacher/assessments" },
+    { 
+      icon: GraduationCap, 
+      label: "Subjects", 
+      items: [
+        {
+          name: "Mathematics",
+          path: "/teacher/subjects/math",
+          grades: ["Grade 9", "Grade 10", "Grade 11"],
+          assessments: [
+            { name: "Algebra Quiz", path: "/teacher/subjects/math/algebra" },
+            { name: "Geometry Test", path: "/teacher/subjects/math/geometry" },
+          ],
+        },
+        {
+          name: "Science",
+          path: "/teacher/subjects/science",
+          grades: ["Grade 9", "Grade 10"],
+          assessments: [
+            { name: "Biology Assessment", path: "/teacher/subjects/science/biology" },
+            { name: "Chemistry Lab", path: "/teacher/subjects/science/chemistry" },
+          ],
+        },
+        {
+          name: "English",
+          path: "/teacher/subjects/english",
+          grades: ["Grade 11", "Grade 12"],
+          assessments: [
+            { name: "Literature Review", path: "/teacher/subjects/english/literature" },
+            { name: "Grammar Test", path: "/teacher/subjects/english/grammar" },
+          ],
+        },
+      ],
+    },
     { icon: Users, label: "Users", path: "/teacher/users" },
     { icon: BarChart, label: "Analytics", path: "/teacher/analytics" },
   ];
@@ -178,3 +210,4 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
     </SidebarProvider>
   );
 };
+
