@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, SidebarMenuSub } from "@/components/ui/sidebar";
 import { BookOpen, Users, BarChart, LogOut, Menu, GraduationCap, ChevronRight } from "lucide-react";
@@ -89,7 +88,17 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
     { icon: BarChart, label: "Grades", path: "/student/grades" },
   ];
 
-  const menuItems = isStudentSection ? studentMenuItems : teacherMenuItems;
+  const adminMenuItems = [
+    { icon: BookOpen, label: "Dashboard", path: "/admin" },
+    { icon: GraduationCap, label: "Grades & Courses", path: "/school-management" },
+    { icon: Users, label: "Users", path: "/admin/users" },
+    { icon: BarChart, label: "Analytics", path: "/admin/analytics" },
+  ];
+
+  // Determine which menu items to show based on the route
+  const isAdminSection = location.pathname.startsWith("/admin") || location.pathname.startsWith("/school-management");
+  const isStudentSection = location.pathname.startsWith("/student");
+  const menuItems = isAdminSection ? adminMenuItems : isStudentSection ? studentMenuItems : teacherMenuItems;
 
   const toggleSubject = (subjectName: string, event: React.MouseEvent) => {
     event.preventDefault();
@@ -210,4 +219,3 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
     </SidebarProvider>
   );
 };
-
