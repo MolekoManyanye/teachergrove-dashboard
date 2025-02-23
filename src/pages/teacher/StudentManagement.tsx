@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -38,6 +37,19 @@ interface GradeOption {
   level: number;
   section: string;
   display: string;
+}
+
+interface StudentResponse {
+  status: "exists" | "created";
+  message: string;
+  student?: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    studentId: string;
+    grade: string;
+    courses: string[];
+  };
 }
 
 const StudentManagement = () => {
@@ -88,24 +100,60 @@ const StudentManagement = () => {
     return matchesSearch && matchesGrade && matchesSubject;
   });
 
-  const handleAddStudent = () => {
-    // Here you would typically make an API call to add the student
-    console.log('Adding new student:', newStudent);
-    
-    toast({
-      title: "Success",
-      description: "Student has been successfully added.",
-    });
-    
-    setIsDialogOpen(false);
-    setNewStudent({
-      firstName: "",
-      lastName: "",
-      email: "",
-      studentId: "",
-      grade: "",
-      courses: [],
-    });
+  const handleAddStudent = async () => {
+    try {
+      const response = await fetch('/api/students', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newStudent),
+      });
+
+      const data: StudentResponse = await response.json();
+
+      if (data.status === "exists") {
+        toast({
+          title: "Student Already Exists",
+          description: (
+            <div className="mt-2 space-y-2 text-sm">
+              <p>{data.message}</p>
+              {data.student && (
+                <div className="bg-muted p-3 rounded-md">
+                  <p><strong>Name:</strong> {data.student.firstName} {data.student.lastName}</p>
+                  <p><strong>Email:</strong> {data.student.email}</p>
+                  <p><strong>Student ID:</strong> {data.student.studentId}</p>
+                  <p><strong>Grade:</strong> {data.student.grade}</p>
+                  <p><strong>Courses:</strong> {data.student.courses.join(", ")}</p>
+                </div>
+              )}
+            </div>
+          ),
+          duration: 5000,
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: data.message,
+        });
+      }
+      
+      setIsDialogOpen(false);
+      setNewStudent({
+        firstName: "",
+        lastName: "",
+        email: "",
+        studentId: "",
+        grade: "",
+        courses: [],
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to add student. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleInputChange = (field: keyof NewStudent, value: string | string[]) => {
@@ -319,4 +367,3 @@ const StudentManagement = () => {
 };
 
 export default StudentManagement;
-
