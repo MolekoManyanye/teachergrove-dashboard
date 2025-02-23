@@ -7,10 +7,11 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
   const navigate = useNavigate();
   const location = useLocation();
   const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
-  const [isSubjectsExpanded, setIsSubjectsExpanded] = useState(false); // Changed to false for initial collapsed state
+  const [isSubjectsExpanded, setIsSubjectsExpanded] = useState(false);
   
   // Determine if we're in student or teacher section
   const isStudentSection = location.pathname.startsWith("/student");
+  const isAdminSection = location.pathname.startsWith("/admin");
 
   const teacherMenuItems = [
     { icon: BookOpen, label: "Dashboard", path: "/teacher" },
@@ -90,13 +91,12 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
 
   const adminMenuItems = [
     { icon: BookOpen, label: "Dashboard", path: "/admin" },
-    { icon: GraduationCap, label: "Grades & Courses", path: "/school-management" },
+    { icon: GraduationCap, label: "Grades & Courses", path: "/admin/management" },
     { icon: Users, label: "Users", path: "/admin/users" },
     { icon: BarChart, label: "Analytics", path: "/admin/analytics" },
   ];
 
   // Determine which menu items to show based on the route
-  const isAdminSection = location.pathname.startsWith("/admin") || location.pathname.startsWith("/school-management");
   const menuItems = isAdminSection ? adminMenuItems : isStudentSection ? studentMenuItems : teacherMenuItems;
 
   const toggleSubject = (subjectName: string, event: React.MouseEvent) => {
@@ -107,7 +107,6 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
   const toggleSubjects = (event: React.MouseEvent) => {
     event.preventDefault();
     setIsSubjectsExpanded(!isSubjectsExpanded);
-    // When closing subjects menu, also close any open subject
     if (isSubjectsExpanded) {
       setExpandedSubject(null);
     }
@@ -120,9 +119,8 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
           <SidebarContent>
             <div className="flex items-center justify-between px-4 py-6">
               <h1 className="text-xl font-semibold text-mint-600">
-                {isStudentSection ? "StudentHub" : "TeacherGrove"}
+                {isAdminSection ? "AdminHub" : isStudentSection ? "StudentHub" : "TeacherGrove"}
               </h1>
-              {/* Mobile menu trigger */}
               <div className="md:hidden">
                 <SidebarTrigger />
               </div>
@@ -208,7 +206,6 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
           </SidebarContent>
         </Sidebar>
         <main className="flex-1 min-h-screen p-8 animate-fadeIn">
-          {/* Desktop menu trigger */}
           <div className="hidden md:block mb-4">
             <SidebarTrigger className="hover:bg-mint-50" />
           </div>

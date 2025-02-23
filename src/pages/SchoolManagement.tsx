@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UserManagement from "@/components/admin/UserManagement";
@@ -27,7 +26,6 @@ const SchoolManagement = () => {
     classes: [] as string[]
   });
 
-  // Simulated data (replace with actual data from backend)
   const [grades, setGrades] = useState([
     { level: 9, sections: ["A", "B", "C"] },
     { level: 10, sections: ["A", "B"] }
@@ -59,7 +57,6 @@ const SchoolManagement = () => {
       return;
     }
 
-    // Here you would make an API call to add the grade
     const newGrade = {
       level: parseInt(gradeForm.level),
       sections: sections
@@ -86,7 +83,6 @@ const SchoolManagement = () => {
       return;
     }
 
-    // Here you would make an API call to add the subject
     const newSubject = {
       name: subjectForm.name,
       classes: subjectForm.classes
@@ -323,4 +319,3 @@ const SchoolManagement = () => {
 };
 
 export default SchoolManagement;
-
