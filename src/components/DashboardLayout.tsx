@@ -97,7 +97,6 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
 
   // Determine which menu items to show based on the route
   const isAdminSection = location.pathname.startsWith("/admin") || location.pathname.startsWith("/school-management");
-  const isStudentSection = location.pathname.startsWith("/student");
   const menuItems = isAdminSection ? adminMenuItems : isStudentSection ? studentMenuItems : teacherMenuItems;
 
   const toggleSubject = (subjectName: string, event: React.MouseEvent) => {
