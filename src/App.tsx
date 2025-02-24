@@ -90,8 +90,34 @@ const App = () => (
             </DashboardLayout>
           }
         />
+
+        {/* Admin Routes */}
         <Route
-          path="/school-management"
+          path="/admin"
+          element={
+            <DashboardLayout>
+              <SchoolManagement />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/admin/management"
+          element={
+            <DashboardLayout>
+              <SchoolManagement />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <DashboardLayout>
+              <SchoolManagement />
+            </DashboardLayout>
+          }
+        />
+        <Route
+          path="/admin/analytics"
           element={
             <DashboardLayout>
               <SchoolManagement />
