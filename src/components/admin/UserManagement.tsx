@@ -22,33 +22,86 @@ import {
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
-import { UserPlus, Search, Mail } from "lucide-react";
+import { UserPlus, Search, Mail, X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
-const MOCK_USERS = [
-  { id: 1, name: "John Smith", role: "Teacher", email: "john.smith@school.com", status: "Active" },
-  { id: 2, name: "Sarah Johnson", role: "Student", email: "sarah.j@school.com", status: "Active" },
-  { id: 3, name: "Mike Wilson", role: "Teacher", email: "mike.w@school.com", status: "Inactive" },
-];
+interface NewUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+  id: string;
+  role: string;
+  grade?: string;
+  courses: string[];
+}
 
 const UserManagement = () => {
   const { toast } = useToast();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [newUser, setNewUser] = useState({
-    name: "",
+  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
+  const [newUser, setNewUser] = useState<NewUser>({
+    firstName: "",
+    lastName: "",
     email: "",
+    id: "",
     role: "Student",
+    grade: "",
+    courses: [],
   });
 
+  const allSubjects = [
+    "Mathematics 9", "Science 9", "English 9", "History 9",
+    "Mathematics 10", "Science 10", "English 10", "History 10",
+    "Mathematics 11", "Physics 11", "English 11", "Chemistry 11",
+    "Mathematics 12", "Physics 12", "English 12", "Chemistry 12"
+  ];
+
+  const gradeOptions = [
+    "9A", "9B", "9C",
+    "10A", "10B", "10C",
+    "11A", "11B", "11C",
+    "12A", "12B", "12C"
+  ];
+
+  const handleInputChange = (field: keyof NewUser, value: string) => {
+    setNewUser(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleAddCourse = (course: string) => {
+    if (!newUser.courses.includes(course)) {
+      setNewUser(prev => ({
+        ...prev,
+        courses: [...prev.courses, course],
+      }));
+    }
+  };
+
+  const removeCourse = (courseToRemove: string) => {
+    setNewUser(prev => ({
+      ...prev,
+      courses: prev.courses.filter(course => course !== courseToRemove),
+    }));
+  };
+
   const handleCreateUser = () => {
-    // Here you would typically make an API call to create the user
     toast({
       title: "User Created",
-      description: `Successfully created user ${newUser.name}`,
+      description: `Successfully created ${newUser.role.toLowerCase()} ${newUser.firstName} ${newUser.lastName}`,
     });
     setIsCreateDialogOpen(false);
-    setNewUser({ name: "", email: "", role: "Student" });
+    setNewUser({
+      firstName: "",
+      lastName: "",
+      email: "",
+      id: "",
+      role: "Student",
+      grade: "",
+      courses: [],
+    });
   };
 
   const handlePasswordReset = (email: string) => {
@@ -78,7 +131,7 @@ const UserManagement = () => {
               Add User
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="sm:max-w-[525px]">
             <DialogHeader>
               <DialogTitle>Create New User</DialogTitle>
               <DialogDescription>
@@ -86,13 +139,25 @@ const UserManagement = () => {
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Full Name</Label>
-                <Input
-                  id="name"
-                  value={newUser.name}
-                  onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    id="firstName"
+                    value={newUser.firstName}
+                    onChange={(e) => handleInputChange("firstName", e.target.value)}
+                    placeholder="John"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    id="lastName"
+                    value={newUser.lastName}
+                    onChange={(e) => handleInputChange("lastName", e.target.value)}
+                    placeholder="Doe"
+                  />
+                </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -100,23 +165,86 @@ const UserManagement = () => {
                   id="email"
                   type="email"
                   value={newUser.email}
-                  onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  placeholder="user@school.com"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="id">ID</Label>
+                <Input
+                  id="id"
+                  value={newUser.id}
+                  onChange={(e) => handleInputChange("id", e.target.value)}
+                  placeholder="USR123"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="role">Role</Label>
                 <Select
                   value={newUser.role}
-                  onValueChange={(value) => setNewUser({ ...newUser, role: value })}
+                  onValueChange={(value) => handleInputChange("role", value)}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a role" />
+                    <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Student">Student</SelectItem>
                     <SelectItem value="Teacher">Teacher</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              {newUser.role === "Student" && (
+                <div className="space-y-2">
+                  <Label htmlFor="grade">Grade</Label>
+                  <Select
+                    value={newUser.grade}
+                    onValueChange={(value) => handleInputChange("grade", value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select grade" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {gradeOptions.map((grade) => (
+                        <SelectItem key={grade} value={grade}>
+                          {grade}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              <div className="space-y-2">
+                <Label>Courses</Label>
+                <Select
+                  onValueChange={handleAddCourse}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Add courses" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {allSubjects.map((subject) => (
+                      <SelectItem key={subject} value={subject}>
+                        {subject}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {newUser.courses.map((course) => (
+                    <span
+                      key={course}
+                      className="bg-gray-100 px-2 py-1 rounded-md flex items-center gap-1"
+                    >
+                      {course}
+                      <button
+                        onClick={() => removeCourse(course)}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
             <DialogFooter>
@@ -182,3 +310,4 @@ const UserManagement = () => {
 };
 
 export default UserManagement;
+

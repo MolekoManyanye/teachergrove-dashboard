@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, X } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -82,23 +82,42 @@ const StudentManagement = () => {
     { level: 12, section: "C", display: "12C" },
   ];
 
-  const subjects = ["Mathematics", "Science", "English", "History", "Physics"];
+  const coursesByGrade: Record<string, string[]> = {
+    "9A": ["Mathematics 9", "Science 9", "English 9", "History 9"],
+    "9B": ["Mathematics 9", "Science 9", "English 9", "History 9"],
+    "9C": ["Mathematics 9", "Science 9", "English 9", "History 9"],
+    "10A": ["Mathematics 10", "Science 10", "English 10", "History 10"],
+    "10B": ["Mathematics 10", "Science 10", "English 10", "History 10"],
+    "10C": ["Mathematics 10", "Science 10", "English 10", "History 10"],
+    "11A": ["Mathematics 11", "Physics 11", "English 11", "Chemistry 11"],
+    "11B": ["Mathematics 11", "Physics 11", "English 11", "Chemistry 11"],
+    "11C": ["Mathematics 11", "Physics 11", "English 11", "Chemistry 11"],
+    "12A": ["Mathematics 12", "Physics 12", "English 12", "Chemistry 12"],
+    "12B": ["Mathematics 12", "Physics 12", "English 12", "Chemistry 12"],
+    "12C": ["Mathematics 12", "Physics 12", "English 12", "Chemistry 12"],
+  };
 
-  const mockStudents = [
-    { id: 1, name: "Jane Smith", email: "jane@example.com", grade: "10A", subjects: ["Mathematics", "Science"], status: "Active" },
-    { id: 2, name: "Sarah Wilson", email: "sarah@example.com", grade: "9C", subjects: ["English", "History"], status: "Active" },
-    { id: 3, name: "Tom Brown", email: "tom@example.com", grade: "11B", subjects: ["Physics", "Mathematics"], status: "Active" },
-    { id: 4, name: "Lisa Johnson", email: "lisa@example.com", grade: "10C", subjects: ["Science", "English"], status: "Inactive" },
-  ];
+  const handleGradeChange = (value: string) => {
+    setNewStudent(prev => ({
+      ...prev,
+      grade: value,
+      courses: coursesByGrade[value] || []
+    }));
+  };
 
-  const filteredStudents = mockStudents.filter(student => {
-    const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         student.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGrade = selectedGrade === "all" || student.grade === selectedGrade;
-    const matchesSubject = selectedSubject === "all" || student.subjects.includes(selectedSubject);
-    
-    return matchesSearch && matchesGrade && matchesSubject;
-  });
+  const removeCourse = (courseToRemove: string) => {
+    setNewStudent(prev => ({
+      ...prev,
+      courses: prev.courses.filter(course => course !== courseToRemove)
+    }));
+  };
+
+  const handleInputChange = (field: keyof NewStudent, value: string | string[]) => {
+    setNewStudent(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const handleAddStudent = async () => {
     try {
@@ -156,12 +175,14 @@ const StudentManagement = () => {
     }
   };
 
-  const handleInputChange = (field: keyof NewStudent, value: string | string[]) => {
-    setNewStudent(prev => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+  const filteredStudents = mockStudents.filter(student => {
+    const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         student.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGrade = selectedGrade === "all" || student.grade === selectedGrade;
+    const matchesSubject = selectedSubject === "all" || student.subjects.includes(selectedSubject);
+    
+    return matchesSearch && matchesGrade && matchesSubject;
+  });
 
   return (
     <div className="space-y-8">
@@ -227,7 +248,7 @@ const StudentManagement = () => {
                 <Label htmlFor="grade">Grade</Label>
                 <Select
                   value={newStudent.grade}
-                  onValueChange={(value) => handleInputChange("grade", value)}
+                  onValueChange={handleGradeChange}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select grade" />
@@ -243,21 +264,22 @@ const StudentManagement = () => {
               </div>
               <div className="space-y-2">
                 <Label>Courses</Label>
-                <Select
-                  value={newStudent.courses[0] || ""}
-                  onValueChange={(value) => handleInputChange("courses", [value])}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select course" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {subjects.map((subject) => (
-                      <SelectItem key={subject} value={subject}>
-                        {subject}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {newStudent.courses.map((course) => (
+                    <span
+                      key={course}
+                      className="bg-gray-100 px-2 py-1 rounded-md flex items-center gap-1"
+                    >
+                      {course}
+                      <button
+                        onClick={() => removeCourse(course)}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
             <DialogFooter>
